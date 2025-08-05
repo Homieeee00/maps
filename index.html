@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App GPS y Sensores</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 400px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Proyecto Móvil GPS + Sensor</h1>
+
+  <div class="card">
+    <h2>Ubicación GPS</h2>
+    <p><strong>Latitud:</strong> <span id="lat">---</span></p>
+    <p><strong>Longitud:</strong> <span id="lon">---</span></p>
+    <p><strong>Precisión:</strong> <span id="acc">---</span> metros</p>
+  </div>
+
+  <div class="card">
+    <h2>Sensor de Brújula</h2>
+    <p><strong>Orientación:</strong> <span id="alpha">---</span>°</p>
+    <p><strong>Inclinación X:</strong> <span id="beta">---</span>°</p>
+    <p><strong>Inclinación Y:</strong> <span id="gamma">---</span>°</p>
+  </div>
+
+  <script>
+    // --- PROYECTO 1: GPS ---
+    if ("geolocation" in navigator) {
+      navigator.geolocation.watchPosition(
+        (position) => {
+          document.getElementById("lat").textContent = position.coords.latitude.toFixed(6);
+          document.getElementById("lon").textContent = position.coords.longitude.toFixed(6);
+          document.getElementById("acc").textContent = position.coords.accuracy.toFixed(2);
+        },
+        (error) => {
+          alert("Error al obtener ubicación: " + error.message);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      alert("Geolocalización no soportada en este dispositivo.");
+    }
+
+    // --- PROYECTO 2: SENSOR (BRÚJULA / INCLINACIÓN) ---
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener("deviceorientation", (event) => {
+        document.getElementById("alpha").textContent = event.alpha ? event.alpha.toFixed(2) : "---";
+        document.getElementById("beta").textContent = event.beta ? event.beta.toFixed(2) : "---";
+        document.getElementById("gamma").textContent = event.gamma ? event.gamma.toFixed(2) : "---";
+      });
+    } else {
+      alert("Sensores de orientación no soportados en este dispositivo.");
+    }
+  </script>
+
+</body>
+</html>
